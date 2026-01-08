@@ -10,6 +10,7 @@ Agent Skills are self-contained packages of instructions, templates, and resourc
 
 | Skill | Description |
 |-------|-------------|
+| [roast-review](.claude/skills/roast-review/) | Code review via Gemini "roast" with Claude validation of flagged issues |
 | [spec-driven-development](.claude/skills/spec-driven-development/) | Structured methodology where specifications drive code generation |
 
 ## Installation
