@@ -304,33 +304,32 @@ Before implementation, verify:
 ```
 
 **contracts/api.md**:
-```markdown
-# API Contract: [FEATURE_NAME]
 
-## Endpoints
-
-### POST /api/[resource]
-**Purpose**: [What it does]
-
-**Request**:
-```json
-{
-  "field": "type"
-}
-```
-
-**Response 200**:
-```json
-{
-  "id": "uuid",
-  "field": "value"
-}
-```
-
-**Errors**:
-- 400: [When]
-- 404: [When]
-```
+    # API Contract: [FEATURE_NAME]
+    
+    ## Endpoints
+    
+    ### POST /api/[resource]
+    **Purpose**: [What it does]
+    
+    **Request**:
+    ```json
+    {
+      "field": "type"
+    }
+    ```
+    
+    **Response 200**:
+    ```json
+    {
+      "id": "uuid",
+      "field": "value"
+    }
+    ```
+    
+    **Errors**:
+    - 400: [When]
+    - 404: [When]
 
 > **Note**: See `references/templates.md` for full plan, data model, and API contract templates.
 
