@@ -1,0 +1,366 @@
+# Home Assistant Lovelace Dashboard Example
+# Place in dashboards/custom.yaml and reference in configuration.yaml:
+#
+# lovelace:
+#   mode: storage
+#   dashboards:
+#     custom:
+#       mode: yaml
+#       title: Custom
+#       icon: mdi:view-dashboard
+#       show_in_sidebar: true
+#       filename: dashboards/custom.yaml
+
+title: Home Dashboard
+views:
+  # Main Overview
+  - title: Home
+    path: home
+    icon: mdi:home
+    type: sections
+    max_columns: 4
+    sections:
+      # Welcome Header
+      - type: grid
+        cards:
+          - type: markdown
+            content: |
+              # Welcome Home
+              **{{ now().strftime('%A, %B %d, %Y') }}**
+
+              Temperature: {{ states('sensor.indoor_temperature') }}°C
+              Humidity: {{ states('sensor.indoor_humidity') }}%
+
+      # Quick Controls
+      - type: grid
+        title: Quick Controls
+        cards:
+          - type: tile
+            entity: light.living_room
+            name: Living Room
+            color: amber
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.bedroom
+            name: Bedroom
+            color: blue
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: climate.thermostat
+            name: Thermostat
+          - type: tile
+            entity: lock.front_door
+            name: Front Door
+
+      # Climate Section
+      - type: grid
+        title: Climate
+        cards:
+          - type: thermostat
+            entity: climate.living_room
+          - type: sensor
+            entity: sensor.indoor_temperature
+            name: Temperature
+            graph: line
+            hours_to_show: 24
+            detail: 2
+          - type: sensor
+            entity: sensor.indoor_humidity
+            name: Humidity
+            graph: line
+            hours_to_show: 24
+
+      # Security Section
+      - type: grid
+        title: Security
+        cards:
+          - type: alarm-panel
+            entity: alarm_control_panel.home
+            states:
+              - arm_home
+              - arm_away
+          - type: entities
+            title: Doors & Windows
+            entities:
+              - binary_sensor.front_door
+              - binary_sensor.back_door
+              - binary_sensor.garage_door
+              - binary_sensor.living_room_window
+            state_color: true
+
+      # Weather Section
+      - type: grid
+        title: Weather
+        cards:
+          - type: weather-forecast
+            entity: weather.home
+            show_forecast: true
+            forecast_type: daily
+
+  # Lights View
+  - title: Lights
+    path: lights
+    icon: mdi:lightbulb-group
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        title: Living Room
+        cards:
+          - type: tile
+            entity: light.living_room_ceiling
+            features:
+              - type: light-brightness
+              - type: light-color-temp
+          - type: tile
+            entity: light.living_room_lamp
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.living_room_accent
+            features:
+              - type: light-brightness
+              - type: light-color-temp
+
+      - type: grid
+        title: Bedroom
+        cards:
+          - type: tile
+            entity: light.bedroom_ceiling
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.bedroom_nightstand_left
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.bedroom_nightstand_right
+            features:
+              - type: light-brightness
+
+      - type: grid
+        title: Kitchen
+        cards:
+          - type: tile
+            entity: light.kitchen_ceiling
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.kitchen_counter
+            features:
+              - type: light-brightness
+
+      - type: grid
+        title: Exterior
+        cards:
+          - type: tile
+            entity: light.porch
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.pathway
+            features:
+              - type: light-brightness
+          - type: tile
+            entity: light.garage
+            features:
+              - type: light-brightness
+
+  # Media View
+  - title: Media
+    path: media
+    icon: mdi:play-circle
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        title: Living Room
+        cards:
+          - type: media-control
+            entity: media_player.living_room_tv
+          - type: media-control
+            entity: media_player.living_room_speaker
+
+      - type: grid
+        title: Bedroom
+        cards:
+          - type: media-control
+            entity: media_player.bedroom_tv
+          - type: media-control
+            entity: media_player.bedroom_speaker
+
+  # Cameras View
+  - title: Cameras
+    path: cameras
+    icon: mdi:cctv
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        title: Security Cameras
+        cards:
+          - type: picture-entity
+            entity: camera.front_door
+            camera_view: live
+            show_state: false
+          - type: picture-entity
+            entity: camera.backyard
+            camera_view: live
+            show_state: false
+          - type: picture-entity
+            entity: camera.garage
+            camera_view: live
+            show_state: false
+          - type: picture-entity
+            entity: camera.driveway
+            camera_view: live
+            show_state: false
+
+  # Energy View
+  - title: Energy
+    path: energy
+    icon: mdi:flash
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        title: Power Usage
+        cards:
+          - type: sensor
+            entity: sensor.total_power
+            name: Current Power
+            graph: line
+            hours_to_show: 24
+          - type: statistics-graph
+            title: Daily Energy
+            entities:
+              - sensor.daily_energy
+            stat_types:
+              - sum
+            period:
+              calendar:
+                period: day
+
+      - type: grid
+        title: Devices
+        cards:
+          - type: entities
+            title: High Power Devices
+            entities:
+              - sensor.hvac_power
+              - sensor.water_heater_power
+              - sensor.dryer_power
+              - sensor.washing_machine_power
+            state_color: true
+
+  # Automations View
+  - title: Automations
+    path: automations
+    icon: mdi:robot
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        title: Quick Scenes
+        cards:
+          - type: button
+            entity: scene.movie_mode
+            name: Movie Mode
+            icon: mdi:movie
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.movie_mode
+          - type: button
+            entity: scene.bedtime
+            name: Bedtime
+            icon: mdi:bed
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.bedtime
+          - type: button
+            entity: scene.morning
+            name: Morning
+            icon: mdi:weather-sunny
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.morning
+          - type: button
+            entity: scene.away
+            name: Away
+            icon: mdi:home-export-outline
+            tap_action:
+              action: call-service
+              service: scene.turn_on
+              target:
+                entity_id: scene.away
+
+      - type: grid
+        title: Automation Status
+        cards:
+          - type: entities
+            title: Active Automations
+            entities:
+              - automation.motion_lights_living_room
+              - automation.thermostat_away_mode
+              - automation.doorbell_notification
+              - automation.sunset_lights
+              - automation.daily_backup
+            state_color: true
+            show_header_toggle: false
+
+  # System View
+  - title: System
+    path: system
+    icon: mdi:cog
+    type: sections
+    max_columns: 2
+    sections:
+      - type: grid
+        title: Home Assistant
+        cards:
+          - type: entities
+            title: System Status
+            entities:
+              - sensor.processor_use
+              - sensor.memory_use
+              - sensor.disk_use
+              - sensor.uptime
+            state_color: true
+          - type: history-graph
+            title: System Load
+            entities:
+              - sensor.processor_use
+              - sensor.memory_use
+            hours_to_show: 24
+
+      - type: grid
+        title: Network
+        cards:
+          - type: entities
+            title: Network Status
+            entities:
+              - binary_sensor.internet
+              - sensor.speedtest_download
+              - sensor.speedtest_upload
+              - sensor.speedtest_ping
+            state_color: true
+
+      - type: grid
+        title: Batteries
+        cards:
+          - type: entities
+            title: Device Batteries
+            entities:
+              - sensor.motion_sensor_battery
+              - sensor.door_sensor_battery
+              - sensor.temperature_sensor_battery
+              - sensor.window_sensor_battery
+            state_color: true
